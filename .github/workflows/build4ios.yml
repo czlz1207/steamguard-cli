@@ -37,4 +37,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: steamguard
-        path: target/aarch64-apple-ios/release/
+        path: target/aarch64-apple-ios/release/steamguard
