@@ -1,0 +1,40 @@
+name: Build for iOS
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:  # 添加手动触发方式
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        profile: minimal
+        toolchain: stable
+        components: rustfmt, clippy
+
+    - name: Install Cross
+      run: cargo install cross
+
+    - name: Add iOS target
+      run: rustup target add aarch64-apple-ios
+
+    - name: Build for iOS
+      run: cross build --release --target aarch64-apple-ios
+
+    - name: Upload Build Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: steamguard
+        path: target/aarch64-apple-ios/release/
